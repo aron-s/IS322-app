@@ -27,11 +27,17 @@ async function getComics() {
     `http://gateway.marvel.com/v1/public/comics?ts=${ts}&apikey=${apikey}&hash=${hash}`,
     { cache: 'no-store'}
   );
-  const data = await response.json();
-  // console.log(`data: ${data}`);
-  const comics = data.data.results;
 
-  return comics
+  if (response.ok) {
+    const data = await response.json();
+    // console.log(`data: ${data}`);
+  
+    const comics = data.data.results; 
+    return comics
+  }
+  else {
+    return []
+  }
 }
 
 
