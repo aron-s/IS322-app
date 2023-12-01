@@ -9,13 +9,28 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export function CategoryCard() {
-    const tasks = 5;
-    const category = "Work";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogOverlay,
+  DialogPortal,
+} from "@/components/ui/dialog"
+
+import ViewTasks  from "./ViewTasks"
+
+
+export function CategoryCard({ category, tasks, setTask}) {
   return (
+    <Dialog>
+
     <Card className="">
       <CardHeader>
-      <CardDescription>{tasks} New Tasks  </CardDescription>
+      <CardDescription>{tasks.length} New Tasks  </CardDescription>
 
         <CardTitle>{category}</CardTitle>
       </CardHeader>
@@ -23,8 +38,18 @@ export function CategoryCard() {
        
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button>Complete</Button>
+      <DialogTrigger>
+
+        <Button>
+          View Tasks
+        </Button>
+        </DialogTrigger>
       </CardFooter>
     </Card>
+
+    <ViewTasks tasks={tasks} category={category} setTask={setTask}/>
+    
+    </Dialog>
+
   )
 }

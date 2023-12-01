@@ -11,6 +11,11 @@ import { useState } from "react"
 
 import { DialogFooter } from "./ui/dialog"
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { set } from "date-fns"
+
+
 const AddTaskForm = () => {
     const [formData, setFormData] = useState({
         description: '',
@@ -20,6 +25,7 @@ const AddTaskForm = () => {
         autosomething: false,
       });
       const [date, setDate] = useState();
+      const [loading, setLoading] = useState(false);
     
       const items = [
         {
@@ -46,26 +52,34 @@ const AddTaskForm = () => {
           [id]: !prevData[id],
         }));
       };
-    
+      
       const handleSubmit = async () => {
+        setLoading(true);
         try {
-          const response = await fetch('/api/add', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              ...formData,
-              date: date ? date.toLocaleDateString() : null,
+          
+          const response = await toast.promise(
+            fetch('/api/add', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                ...formData,
+                date: date ? date.toLocaleDateString() : null,
+              }),
             }),
-          });
-    
+            {
+              pending: 'Creating task...',
+              success: 'Task created!',
+              error: 'Failed to create task',
+            }
+          )
+          
           if (response.ok) {
             const json = await response.json();
             // Handle success
-            alert(json.message)
-            console.log('Task created successfully');
             console.log(json)
+              
           } else {
             // Handle error
             console.error('Failed to create task');
@@ -73,9 +87,11 @@ const AddTaskForm = () => {
         } catch (error) {
           console.error('Error during the POST request:', error);
         }
+        setLoading(false);
       };
   return (
     <>
+   
     <div className="grid gap-4 py-4">
           <div className="grid w-full gap-1.5">
             <Label htmlFor="message">Description</Label>
@@ -118,10 +134,12 @@ const AddTaskForm = () => {
           </div>
         </div>
         <DialogFooter>
-          <Button type="button" onClick={handleSubmit}>
+          <Button type="button" onClick={handleSubmit} disabled={loading}>
             Create Task
           </Button>
         </DialogFooter>
+
+
         </>
   )
 }

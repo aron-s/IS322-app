@@ -7,6 +7,8 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
+  DialogOverlay,
+  DialogPortal,
 } from "@/components/ui/dialog"
 
 import { Input } from "@/components/ui/input"
@@ -17,15 +19,47 @@ import { FaCirclePlus } from "react-icons/fa6";
 import { DatePicker } from "./DatePicker"
 import { Checkbox } from "./ui/checkbox"
 import AddTaskForm from "./AddTaskForm"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 export function AddTask(){
+  
 
   return (
+    <>   
+            <ToastContainer
+    position="top-center"
+    autoClose={5000}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable={false}
+    pauseOnHover
+    theme="dark"
+    />   
     <Dialog>
+    <DialogPortal>
+      <ToastContainer
+    position="top-center"
+    autoClose={5000}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable={false}
+    pauseOnHover
+    theme="dark"
+    />
+      </DialogPortal>
       <DialogTrigger>
         <FaCirclePlus size={76} className='-translate-y-8 border-8 border-background rounded-full' />
       </DialogTrigger>
+
       <DialogContent className=''>
+    
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>
           <DialogDescription>Create a task.</DialogDescription>
@@ -33,5 +67,7 @@ export function AddTask(){
         <AddTaskForm />
       </DialogContent>
     </Dialog>
+    </>
+
   );
 };
