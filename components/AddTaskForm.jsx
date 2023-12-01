@@ -14,12 +14,12 @@ import { DialogFooter } from "./ui/dialog"
 const AddTaskForm = () => {
     const [formData, setFormData] = useState({
         description: '',
-        date: '',
         autocategorize: true,
         autoprioritize: true,
         autoheader: true,
         autosomething: false,
       });
+      const [date, setDate] = useState();
     
       const items = [
         {
@@ -54,7 +54,10 @@ const AddTaskForm = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({
+              ...formData,
+              date: date ? date.toLocaleDateString() : null,
+            }),
           });
     
           if (response.ok) {
@@ -91,10 +94,8 @@ const AddTaskForm = () => {
           <div className="grid w-full gap-1.5">
             <Label htmlFor="date">Date</Label>
             <DatePicker
-              value={formData.date}
-              onChange={(date) =>
-                setFormData((prevData) => ({ ...prevData, date }))
-              }
+            date = {date}
+            setDate = {setDate}
             />
           </div>
           <h3 className="text-xl font-semibold py-2">AI Autocomplete</h3>
