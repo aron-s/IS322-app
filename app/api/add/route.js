@@ -17,21 +17,27 @@ export async function POST(req, res) {
     try {
         const body = await req.json()
         const description = body.description
-        const dueDate = body.date
-    
+        let dueDate = body.date
+
+        if (!dueDate) {
+            dueDate = 'MM/DD/YYYY (to be filled)'
+        }
+        
+        console.log('test')
+        console.log(dueDate)
     
         const zodSchema = z.object({
             priority: z.number().int().describe("Priority score of the task from 0 to 100"),        // Assuming taskId is an integer
             category: z.string().describe("The category of a task"),            // Assuming category is a string
             description: z.string().describe("The description of the task provided"),         // Assuming description is a string
             title: z.string().describe("A short summarized title generated from the description of the task"),               // Assuming title is a string
-            dueDate: z.string().describe("The due date of the task in 'MM/DD/YYYY' format"),               // Assuming title is a string
+            dueDate: z.string().describe("The predicted due date of the task in 'MM/DD/YYYY' format"),               // Assuming title is a string
           });
           
         const prompt = new ChatPromptTemplate({
             promptMessages: [
               SystemMessagePromptTemplate.fromTemplate(
-                "Given the description of a task, classify it into a category, and create a short summarized title for it. Uisng the task description and the due date given, predict a priority score. If due date is not given predict the due date. \nIf the task is a fit for the current existing categories, you can choose that category. If not, you can create a new category."
+                "Given the description of a task, classify it into a category, and create a short summarized title for it. Using the task description and the due date given, predict a priority score. If due date is not given predict the due date in the MM/DD/YYYY format. \nIf the task is a fit for the current existing categories, you can choose that category. If not, you can create a new category."
               ),
               HumanMessagePromptTemplate.fromTemplate("Task Description: {inputText} \nTodays Date: {inputToday}\nTask Due Date: {inputDate}\nCurrent existing categories: {inputCategories}"),
             ],
@@ -74,8 +80,8 @@ export async function POST(req, res) {
           const response = await chain.invoke({
             inputText:
                   description,
-            inputToday: today,
-                inputDate: dueDate,     
+            inputToday: today, 
+            inputDate: dueDate,    
                 inputCategories: listAsString });
           
         console.log(JSON.stringify(response, null, 2));
@@ -124,7 +130,7 @@ export async function POST(req, res) {
                 data: {
                     title: response.title,
                     description,
-                    dueDate,
+                    dueDate: response.dueDate,
                     priority: response.priority,
                     category: {
                         connect: {

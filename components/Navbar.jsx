@@ -20,7 +20,7 @@ const BottomNav = () => {
 
         </div>
        <div className='flex flex-grow rounded-tl-2xl shadow-custom justify-center items-center pb-4'>
-       <Link href="/chat">
+       <Link href="/all">
        <FaTasks size={23}/>
         </Link>
 

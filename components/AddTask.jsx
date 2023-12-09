@@ -55,7 +55,7 @@ export function AddTask(){
     />
       </DialogPortal>
       <DialogTrigger>
-        <FaCirclePlus size={76} className='-translate-y-8 border-8 border-background rounded-full' />
+        <FaCirclePlus size={76} className='-translate-y-8 border-8 border-background rounded-full z-100' />
       </DialogTrigger>
 
       <DialogContent className=''>

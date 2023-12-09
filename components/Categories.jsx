@@ -3,10 +3,13 @@
 import { set } from "date-fns"
 import { CategoryCard } from "./CategoryCard"
 import { useEffect, useState } from "react"
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 const Categories = () => {
 
   const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/add', {
@@ -23,6 +26,7 @@ const Categories = () => {
       console.error('Error:', error);
     }
     )
+    setLoading(false);
   }
   , [])
 
@@ -55,19 +59,28 @@ const Categories = () => {
   return (
     <div className="mt-6 mb-10">
       <h2 className="text-2xl tracking-tight font-semibold my-6">Categories</h2>
-      <div className="gap-4 grid grid-cols-2">
-        {categories.length > 0 &&
-          categories.map((category) => (
-            <CategoryCard category={category.category} tasks={category.taskIds} key={category.id} setTask={setTask}/>
-          )) 
-        }
-      </div>
       {
-          categories.length == 0 &&
-          <div className="flex flex-col justify-center items-center my-6">
-            <h3 className="text-xl font-semibold">No Categories yet.</h3>
-            <p className="text-lg text-muted">Create a task to get started.</p>
+          loading?
+          <div className="gap-4 grid grid-cols-2">
+          <Skeleton className="h-36 w-full rounded-xl" />
+          <Skeleton className="h-36 w-full rounded-xl" />
+          <Skeleton className="h-36 w-full rounded-xl" />
+          <Skeleton className="h-36 w-full rounded-xl" />
+        </div>: 
+              <div className="gap-4 grid grid-cols-2">
+              {categories.length > 0 &&
+                categories.map((category) => (
+                  <CategoryCard category={category.category} tasks={category.taskIds} key={category.id} setTask={setTask}/>
+                )) 
+              }
           </div>
+        }
+        {
+          categories.length == 0 && !loading &&
+              <div className="flex flex-col justify-center items-center my-6">
+                <h3 className="text-xl font-semibold">No Categories yet.</h3>
+                <p className="text-lg text-muted">Create a task to get started.</p>
+              </div> 
         }
     </div>
   )

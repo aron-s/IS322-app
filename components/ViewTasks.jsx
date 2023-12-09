@@ -15,7 +15,7 @@ import TaskCard  from "./TaskCard"
   
 const ViewTasks = ({category, tasks, setTask}) => {
   return (
-    <DialogContent>
+    <DialogContent className='max-h-[90vh] overflow-scroll no-scrollbar scroll-auto	'>
                 <DialogHeader>
           <DialogTitle>{category}</DialogTitle>
           <DialogDescription>
